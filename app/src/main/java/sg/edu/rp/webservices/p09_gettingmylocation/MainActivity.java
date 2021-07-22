@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // Step 2: Add permissions (in manifest); request for permissions (below)
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
 
         btnGetLn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,6 +26,7 @@ public class LocationService extends Service {
 
     LocationRequest mLocationRequest = LocationRequest.create();
     LocationCallback mLocationCallback;
+    FusedLocationProviderClient client;
 
     public LocationService() {
     }
@@ -45,7 +46,6 @@ public class LocationService extends Service {
             Log.d("MyService", "Service started");
 
             // Step 1: Create a client to connect to Google Play Location Services
-            FusedLocationProviderClient client;
             client = LocationServices.getFusedLocationProviderClient(LocationService.this);
 
             // Step 3a: Perform runtime check of the required permissions (see checkPermission() method at bottom).
