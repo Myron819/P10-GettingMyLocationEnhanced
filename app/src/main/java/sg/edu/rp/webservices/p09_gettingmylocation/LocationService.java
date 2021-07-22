@@ -27,11 +27,9 @@ public class LocationService extends Service {
     LocationRequest mLocationRequest = LocationRequest.create();
     LocationCallback mLocationCallback;
     FusedLocationProviderClient client;
-//    boolean started;
 
     public LocationService() {
     }
-
 
     @Override
     public void onCreate() {
@@ -41,8 +39,6 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        if (!started) {
-//            started = true;
         Log.d("MyService", "Service started");
 
         // Step 1: Create a client to connect to Google Play Location Services
@@ -84,7 +80,6 @@ public class LocationService extends Service {
                         Toast.makeText(LocationService.this, "Failed to write!", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
-
                 }
             }
         };
@@ -108,10 +103,6 @@ public class LocationService extends Service {
             // Step 6: Start the location updates using the FusedLocationProviderClient from step 1.
             client.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
-
-//        } else {
-//            Log.d("MyService", "Service is still running");
-//        }
 
         return super.onStartCommand(intent, flags, startId);
     }
