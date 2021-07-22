@@ -27,11 +27,11 @@ public class LocationService extends Service {
     LocationRequest mLocationRequest = LocationRequest.create();
     LocationCallback mLocationCallback;
     FusedLocationProviderClient client;
+//    boolean started;
 
     public LocationService() {
     }
 
-    boolean started;
 
     @Override
     public void onCreate() {
@@ -41,36 +41,12 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!started) {
-            started = true;
-            Log.d("MyService", "Service started");
+//        if (!started) {
+//            started = true;
+        Log.d("MyService", "Service started");
 
-            // Step 1: Create a client to connect to Google Play Location Services
-            client = LocationServices.getFusedLocationProviderClient(LocationService.this);
-
-            // Step 3a: Perform runtime check of the required permissions (see checkPermission() method at bottom).
-            if (checkPermission()) {
-                // Step 4: define the criteria for a location update
-                mLocationRequest = LocationRequest.create();
-                mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); // Accuracy of the provider
-
-//              // PS Solution values
-//              mLocationRequest.setInterval(30 * 1000);
-//              mLocationRequest.setFastestInterval(5 * 1000);
-//              mLocationRequest.setSmallestDisplacement(500);
-
-                // Testing values
-                mLocationRequest.setInterval(5 * 1000); // (milliseconds) Set the interval in which you want to get locations.
-                mLocationRequest.setFastestInterval(5 * 1000); // (milliseconds) If a location is available sooner you can get it (i.e. another app is using the location services).
-                mLocationRequest.setSmallestDisplacement(0); // (metres) Minimum geographical distance from last reported location
-
-                // Step 6: Start the location updates using the FusedLocationProviderClient from step 1.
-                client.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-            }
-
-        } else {
-            Log.d("MyService", "Service is still running");
-        }
+        // Step 1: Create a client to connect to Google Play Location Services
+        client = LocationServices.getFusedLocationProviderClient(LocationService.this);
 
         // Step 5: Define a set of actions to be carried out whenever a new location is reported from the Google Play Location Services,
         //          by creating a LocationCallback to be associated with the update event.
@@ -82,8 +58,8 @@ public class LocationService extends Service {
                     double lat = data.getLatitude();
                     double lng = data.getLongitude();
 
-//                      tvLat.setText("Latitude : " + lat);
-//                      tvLong.setText("Latitude : " + lng);
+//                  tvLat.setText("Latitude : " + lat);
+//                  tvLong.setText("Latitude : " + lng);
 
                     Toast.makeText(getApplicationContext(), lat + ", " + lng, Toast.LENGTH_SHORT).show();
 
@@ -112,6 +88,31 @@ public class LocationService extends Service {
                 }
             }
         };
+
+        // Step 3a: Perform runtime check of the required permissions (see checkPermission() method at bottom).
+        if (checkPermission()) {
+            // Step 4: define the criteria for a location update
+            mLocationRequest = LocationRequest.create();
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); // Accuracy of the provider
+
+//              // PS Solution values
+//              mLocationRequest.setInterval(30 * 1000);
+//              mLocationRequest.setFastestInterval(5 * 1000);
+//              mLocationRequest.setSmallestDisplacement(500);
+
+            // Testing values
+            mLocationRequest.setInterval(5 * 1000); // (milliseconds) Set the interval in which you want to get locations.
+            mLocationRequest.setFastestInterval(5 * 1000); // (milliseconds) If a location is available sooner you can get it (i.e. another app is using the location services).
+            mLocationRequest.setSmallestDisplacement(0); // (metres) Minimum geographical distance from last reported location
+
+            // Step 6: Start the location updates using the FusedLocationProviderClient from step 1.
+            client.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+        }
+
+//        } else {
+//            Log.d("MyService", "Service is still running");
+//        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
