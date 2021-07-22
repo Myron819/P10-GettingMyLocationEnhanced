@@ -66,52 +66,52 @@ public class LocationService extends Service {
 
                 // Step 6: Start the location updates using the FusedLocationProviderClient from step 1.
                 client.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-
-            } else {
-                Log.d("MyService", "Service is still running");
             }
 
-            // Step 5: Define a set of actions to be carried out whenever a new location is reported from the Google Play Location Services,
-            //          by creating a LocationCallback to be associated with the update event.
-            mLocationCallback = new LocationCallback() {
-                @Override
-                public void onLocationResult(LocationResult locationResult) {
-                    if (locationResult != null) {
-                        Location data = locationResult.getLastLocation();
-                        double lat = data.getLatitude();
-                        double lng = data.getLongitude();
+        } else {
+            Log.d("MyService", "Service is still running");
+        }
+
+        // Step 5: Define a set of actions to be carried out whenever a new location is reported from the Google Play Location Services,
+        //          by creating a LocationCallback to be associated with the update event.
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null) {
+                    Location data = locationResult.getLastLocation();
+                    double lat = data.getLatitude();
+                    double lng = data.getLongitude();
 
 //                      tvLat.setText("Latitude : " + lat);
 //                      tvLong.setText("Latitude : " + lng);
 
-                        Toast.makeText(getApplicationContext(), lat + ", " + lng, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), lat + ", " + lng, Toast.LENGTH_SHORT).show();
 
-                        // Folder creation
-                        String folderLocation_I = getFilesDir().getAbsolutePath() + "/Folder";
-                        File folder = new File(folderLocation_I);
-                        if (folder.exists() == false) {
-                            boolean result = folder.mkdir();
-                            if (result == true) {
-                                Log.d("File Read/Write", "Folder created");
-                            }
+                    // Folder creation
+                    String folderLocation_I = getFilesDir().getAbsolutePath() + "/Folder";
+                    File folder = new File(folderLocation_I);
+                    if (folder.exists() == false) {
+                        boolean result = folder.mkdir();
+                        if (result == true) {
+                            Log.d("File Read/Write", "Folder created");
                         }
-
-                        // File creation and writing
-                        try {
-                            File targetFile_I = new File(folderLocation_I, "data.txt");
-                            FileWriter writer_I = new FileWriter(targetFile_I, true);
-                            writer_I.write(lat + ", " + lng + "\n");
-                            writer_I.flush();
-                            writer_I.close();
-                        } catch (Exception e) {
-                            Toast.makeText(LocationService.this, "Failed to write!", Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-
                     }
+
+                    // File creation and writing
+                    try {
+                        File targetFile_I = new File(folderLocation_I, "data.txt");
+                        FileWriter writer_I = new FileWriter(targetFile_I, true);
+                        writer_I.write(lat + ", " + lng + "\n");
+                        writer_I.flush();
+                        writer_I.close();
+                    } catch (Exception e) {
+                        Toast.makeText(LocationService.this, "Failed to write!", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                 }
-            };
-        }
+            }
+        };
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -120,6 +120,7 @@ public class LocationService extends Service {
         Log.d("MyService", "Service exited");
         super.onDestroy();
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
