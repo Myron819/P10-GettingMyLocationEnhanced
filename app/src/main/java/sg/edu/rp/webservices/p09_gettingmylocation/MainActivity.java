@@ -13,8 +13,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnGetLn, btnStopLn, btnRead;
     TextView tvLastKnown, tvLat, tvLong;
+    ToggleButton tbMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         tvLastKnown = findViewById(R.id.tvLastKnown);
         tvLat = findViewById(R.id.tvLat);
         tvLong = findViewById(R.id.tvLong);
+        tbMusic = findViewById(R.id.tbMusic);
 
         // Step 2: Add permissions (in manifest); request for permissions (below)
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
@@ -51,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
         btnGetLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                }
+                Intent i = new Intent(MainActivity.this, LocationService.class);
+                startService(i);
             }
         });
 
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         btnStopLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                client.removeLocationUpdates(mLocationCallback);
+                Intent i = new Intent(MainActivity.this, LocationService.class);
+                stopService(i);
                 Toast.makeText(getApplicationContext(),"Stopped",Toast.LENGTH_SHORT).show();
             }
         });
@@ -74,17 +78,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        tbMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Intent i = new Intent(MainActivity.this, MusicService.class);
+                    startService(i);
+                } else {
+                    Intent i = new Intent(MainActivity.this, MusicService.class);
+                    stopService(i);
+                }
+            }
+        });
+
     }
 
-    // Step 3b
-    private boolean checkPermission() {
-        int permissionCheck_Coarse = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int permissionCheck_Fine = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if (permissionCheck_Coarse == PermissionChecker.PERMISSION_GRANTED || permissionCheck_Fine == PermissionChecker.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
