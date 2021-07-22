@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         btnStopLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
